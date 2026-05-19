@@ -1,0 +1,11 @@
+datasets/
+processed/
+coresets/
+results/
+__pycache__/
+*.pyc
+.vscode/
+.ipynb_checkpoints/
+*.npy
+*.pkl
+*.csv
