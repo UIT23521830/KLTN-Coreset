@@ -13,6 +13,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import LinearSVC
 from xgboost import XGBClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 
 try:
     from imblearn.metrics import geometric_mean_score
@@ -62,7 +64,9 @@ class TrainingArena:
             "SVM": LinearSVC(random_state=42, dual=False),
             "RF": RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42, n_jobs=-1),
             "XGB": XGBClassifier(n_estimators=100, max_depth=6, random_state=42, use_label_encoder=False, eval_metric="logloss"),
-            "MLP": MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42) # Thêm DL Baseline
+            "MLP": MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42), # Thêm DL Baseline
+            "KNN": KNeighborsClassifier(n_neighbors=5, n_jobs=-1),
+            "NB": GaussianNB()
         }
         if HAS_LIGHTGBM:
             self.models["LGBM"] = LGBMClassifier(n_estimators=100, max_depth=6, random_state=42, verbose=-1)

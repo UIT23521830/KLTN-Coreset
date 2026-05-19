@@ -11,6 +11,7 @@ from .m11_moderate_ds import M11_ModerateDSSelector
 from .m12_dataset_condensation import M12_DatasetCondensationSelector
 from .m13_distribution_matching import M13_DistributionMatchingSelector
 from .m14_tdcoler import M14_TDColERSelector
+from .m15_tabkde import TabKDESelector
 
 # Registry map for easy loading by name in the Factory loop
 METHOD_REGISTRY = {
@@ -27,4 +28,5 @@ METHOD_REGISTRY = {
     "M12_DC": M12_DatasetCondensationSelector,
     "M13_DM": M13_DistributionMatchingSelector,
     "M14_TDColER": M14_TDColERSelector,
+    "M15_TabKDE": TabKDESelector,
 }

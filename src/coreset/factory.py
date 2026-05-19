@@ -138,7 +138,7 @@ if __name__ == "__main__":
     tier_1_fast = ["M01_Random", "M11_ModerateDS"]
     
     # TIER 2: Deep Learning (O(N * Epochs) - Cắt lát tự động)
-    tier_2_neural = ["M08_DataMaps", "M09_Forgetting", "M10_SVP", "M14_TDColER"]
+    tier_2_neural = ["M08_DataMaps", "M09_Forgetting", "M10_SVP", "M14_TDColER", "M15_TabKDE"]
     
     # TIER 3: Tràn (O(N^2) / O(NK) - Nặng nhất, ưu tiên OOM và Timeout cuối cùng)
     tier_3_heavy = ["M03_CoreTab", "M04_SubStrat", "M05_CRAIG", "M06_GradMatch", "M07_GLISTER", "M12_DC", "M13_DM"]
