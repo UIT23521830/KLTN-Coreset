@@ -9,7 +9,7 @@ from sklearn.metrics import (accuracy_score, balanced_accuracy_score, precision_
                              recall_score, f1_score, roc_auc_score, matthews_corrcoef, cohen_kappa_score)
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, HistGradientBoostingClassifier
 from sklearn.svm import LinearSVC
 from xgboost import XGBClassifier
 from sklearn.neural_network import MLPClassifier
@@ -43,6 +43,13 @@ try:
 except ImportError:
     HAS_TABNET = False
 
+# Thử import TabPFN (SOTA Foundation Model cho Tabular 2023)
+try:
+    from tabpfn import TabPFNClassifier
+    HAS_TABPFN = True
+except ImportError:
+    HAS_TABPFN = False
+
 class TrainingArena:
     """
     Đấu trường Huấn luyện (Giai đoạn 3).
@@ -64,6 +71,7 @@ class TrainingArena:
             "SVM": LinearSVC(random_state=42, dual=False),
             "RF": RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42, n_jobs=-1),
             "XGB": XGBClassifier(n_estimators=100, max_depth=6, random_state=42, use_label_encoder=False, eval_metric="logloss"),
+            "HGB": HistGradientBoostingClassifier(max_iter=100, random_state=42),
             "MLP": MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42), # Thêm DL Baseline
             "KNN": KNeighborsClassifier(n_neighbors=5, n_jobs=-1),
             "NB": GaussianNB()
@@ -74,6 +82,8 @@ class TrainingArena:
             self.models["CAT"] = CatBoostClassifier(iterations=100, depth=6, random_seed=42, verbose=0)
         if HAS_TABNET:
             self.models["TABNET"] = TabNetClassifier(verbose=0, seed=42)
+        if HAS_TABPFN:
+            self.models["TABPFN"] = TabPFNClassifier(device='cuda', N_ensemble_configurations=4)
 
     def save_raw_metrics(self, dataset, method, budget, seed, model_name, phase, metrics):
         # Save as JSON
