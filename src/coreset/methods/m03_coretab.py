@@ -48,9 +48,11 @@ class M03_CoreTabSelector(BaseCoresetSelector):
         
         self.last_search_time = 0.0
         
-        # Sử dụng đúng tham số budget_ratio
-        # examples_to_keep = 1 hoặc tùy chỉnh thủ công theo kích thước tập dữ liệu
-        coretab = CoreTabDT(sample_percent=budget_ratio, examples_to_keep=1)
+        # CỰC KỲ QUAN TRỌNG: Phải giới hạn độ sâu của cây (min_samples_leaf) 
+        # Nếu không, Decision Tree sẽ chia mỗi dòng thành 1 lá (Overfit 100%)
+        # làm cho sample_percent vô dụng và luôn bốc 100% dữ liệu.
+        dt_params = {'max_depth': 15, 'min_samples_leaf': 50}
+        coretab = CoreTabDT(sample_percent=budget_ratio, examples_to_keep=1, params=dt_params)
         
         t0 = time.time()
         try:
