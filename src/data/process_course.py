@@ -6,13 +6,13 @@ from sklearn.preprocessing import LabelEncoder
 from .station_core import BaseDataStation
 
 CONFIG = {
-    "train_path": r"C:\KLTN\paper\datasets\CourseQuality\train_med.csv",
-    "val_path":   r"C:\KLTN\paper\datasets\CourseQuality\val_med.csv",
+    "train_path": "datasets/CourseQuality/train_med.csv",
+    "val_path":   "datasets/CourseQuality/val_med.csv",
     "test_paths": [
-        r"C:\KLTN\paper\datasets\CourseQuality\test_med_1.csv",
-        r"C:\KLTN\paper\datasets\CourseQuality\test_med_2.csv",
-        r"C:\KLTN\paper\datasets\CourseQuality\test_med_3.csv",
-        r"C:\KLTN\paper\datasets\CourseQuality\test_med_4.csv",
+        "datasets/CourseQuality/test_med_1.csv",
+        "datasets/CourseQuality/test_med_2.csv",
+        "datasets/CourseQuality/test_med_3.csv",
+        "datasets/CourseQuality/test_med_4.csv",
     ],
     "test_phases": [
         [1],
