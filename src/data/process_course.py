@@ -92,20 +92,16 @@ class CourseQualityStation(BaseDataStation):
             if is_train:
                 df['school_id'] = self.school_enc.fit_transform(df['school_id'].astype(str))
             else:
-                df['school_id'] = df['school_id'].map(
-                    lambda x: self.school_enc.transform([str(x)])[0] 
-                    if str(x) in self.school_enc.classes_ else -1
-                )
+                mapping = {cls: idx for idx, cls in enumerate(self.school_enc.classes_)}
+                df['school_id'] = df['school_id'].astype(str).map(mapping).fillna(-1).astype(int)
                 
         # Encode teacher_id
         if 'teacher_id' in df.columns and df['teacher_id'].dtype == 'object':
             if is_train:
                 df['teacher_id'] = self.teacher_enc.fit_transform(df['teacher_id'].astype(str))
             else:
-                df['teacher_id'] = df['teacher_id'].map(
-                    lambda x: self.teacher_enc.transform([str(x)])[0] 
-                    if str(x) in self.teacher_enc.classes_ else -1
-                )
+                mapping = {cls: idx for idx, cls in enumerate(self.teacher_enc.classes_)}
+                df['teacher_id'] = df['teacher_id'].astype(str).map(mapping).fillna(-1).astype(int)
                 
         # Ép về dạng số nguyên/thực và điền 0 cho khoảng trống
         for col in df.columns:
