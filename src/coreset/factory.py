@@ -148,7 +148,7 @@ if __name__ == "__main__":
     factory.run_experiment(
         dataset_name="CourseQuality", 
         budgets=[0.20], # Sử dụng 1 budget 20% theo yêu cầu
-        n_seeds=1,      # Chạy 1 seed theo yêu cầu
+        n_seeds=10,     # Chạy 10 seeds để đảm bảo tính ổn định thống kê
         methods=ordered_methods
     )
     print("\n✅ HOÀN TẤT THỬ NGHIỆM FACTORY!")
