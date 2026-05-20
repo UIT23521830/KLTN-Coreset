@@ -235,9 +235,6 @@ class TrainingArena:
                         self.save_raw_metrics(dataset_name, method, budget, seed, model_name, {"Error": "OOM"})
                     continue
                 
-                if 'euclid_to_111' in df.columns:
-                    df = df.drop(columns=['euclid_to_111'])
-                    
                 y_c = df['target'].values
                 X_c = df.drop(columns=['target']).values
                 
