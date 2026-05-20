@@ -265,5 +265,15 @@ class TrainingArena:
         print(f"\n✅ Hoàn tất! Dữ liệu thô lưu tại: {self.raw_metrics_dir}")
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--models', type=str, default='ALL', help='Comma-separated list of models to run (e.g. XGB,RF,MLP)')
+    args = parser.parse_args()
+    
     arena = TrainingArena()
+    if args.models != 'ALL':
+        allowed = args.models.split(',')
+        arena.models = {k: v for k, v in arena.models.items() if k in allowed}
+        print(f"[*] Đang chạy phân tán với các mô hình: {list(arena.models.keys())}")
+        
     arena.run_arena()
