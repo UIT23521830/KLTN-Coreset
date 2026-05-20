@@ -9,7 +9,7 @@ class BaseDataStation:
     Base Class for Data Preprocessing.
     Handles standard saving logic (both .npy for fast loading and .csv for C++ compat).
     """
-    def __init__(self, dataset_name, out_dir_base=r"C:\KLTN\paper\processed"):
+    def __init__(self, dataset_name, out_dir_base="processed"):
         self.name = dataset_name
         self.out_dir = os.path.join(out_dir_base, dataset_name)
         os.makedirs(self.out_dir, exist_ok=True)

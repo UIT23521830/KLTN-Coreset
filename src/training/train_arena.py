@@ -83,7 +83,7 @@ class TrainingArena:
         if HAS_TABNET:
             self.models["TABNET"] = TabNetClassifier(verbose=0, seed=42)
         if HAS_TABPFN:
-            self.models["TABPFN"] = TabPFNClassifier(device='cuda', N_ensemble_configurations=4)
+            self.models["TABPFN"] = TabPFNClassifier()
 
     def save_raw_metrics(self, dataset, method, budget, seed, model_name, phase, metrics):
         # Save as JSON
