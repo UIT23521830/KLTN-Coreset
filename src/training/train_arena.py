@@ -157,7 +157,7 @@ class TrainingArena:
         }
         return metrics
 
-    def run_arena(self, dataset_name="CourseQuality"):
+    def run_arena(self, dataset_name="CourseQuality", skip_baseline=False):
         print("="*60)
         print(f"⚔️ TRAINING ARENA - DATASET: {dataset_name}")
         print("="*60)
@@ -190,24 +190,27 @@ class TrainingArena:
             })
             print("    - Single test set loaded.")
         
-        print("\n[+] Đang huấn luyện Baseline (Ngân sách 100%)...")
-        X_train_full = np.load(os.path.join(data_path, "X_train.npy"))
-        y_train_full = np.load(os.path.join(data_path, "y_train.npy"))
-        
-        for model_name, model in self.models.items():
-            # Huấn luyện 1 lần
-            t0 = time.time()
-            if model.__class__.__name__ == "TabNetClassifier":
-                model.fit(X_train_full.astype(np.float32), y_train_full, eval_metric=['auc'])
-            else:
-                model.fit(X_train_full, y_train_full)
-            t_train = time.time() - t0
+        if not skip_baseline:
+            print("\n[+] Đang huấn luyện Baseline (Ngân sách 100%)...")
+            X_train_full = np.load(os.path.join(data_path, "X_train.npy"))
+            y_train_full = np.load(os.path.join(data_path, "y_train.npy"))
             
-            # Đánh giá trên nhiều tập Test
-            for tp in test_phases:
-                metrics = self.evaluate_model_already_fitted(model, t_train, tp['X'], tp['y'])
-                print(f"    - Baseline {model_name} (Phase {tp['phase']}): Acc={metrics['Accuracy']:.4f} | F1={metrics['F1_Macro']:.4f}")
-                self.save_raw_metrics(dataset_name, "Baseline", "100pct", "NA", model_name, tp['phase'], metrics)
+            for model_name, model in self.models.items():
+                # Huấn luyện 1 lần
+                t0 = time.time()
+                if model.__class__.__name__ == "TabNetClassifier":
+                    model.fit(X_train_full.astype(np.float32), y_train_full, eval_metric=['auc'])
+                else:
+                    model.fit(X_train_full, y_train_full)
+                t_train = time.time() - t0
+                
+                # Đánh giá trên nhiều tập Test
+                for tp in test_phases:
+                    metrics = self.evaluate_model_already_fitted(model, t_train, tp['X'], tp['y'])
+                    print(f"    - Baseline {model_name} (Phase {tp['phase']}): Acc={metrics['Accuracy']:.4f} | F1={metrics['F1_Macro']:.4f}")
+                    self.save_raw_metrics(dataset_name, "Baseline", "100pct", "NA", model_name, tp['phase'], metrics)
+        else:
+            print("\n[!] ĐÃ BỎ QUA BASELINE THEO YÊU CẦU.")
 
         dataset_coresets_path = os.path.join(self.coresets_dir)
         if not os.path.exists(dataset_coresets_path):
@@ -265,6 +268,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--models', type=str, default='ALL', help='Comma-separated list of models to run (e.g. XGB,RF,MLP)')
+    parser.add_argument('--skip_baseline', action='store_true', help='Skip training 100pct baseline to save time')
     args = parser.parse_args()
     
     arena = TrainingArena()
@@ -273,4 +277,4 @@ if __name__ == "__main__":
         arena.models = {k: v for k, v in arena.models.items() if k in allowed}
         print(f"[*] Đang chạy phân tán với các mô hình: {list(arena.models.keys())}")
         
-    arena.run_arena()
+    arena.run_arena(skip_baseline=args.skip_baseline)
