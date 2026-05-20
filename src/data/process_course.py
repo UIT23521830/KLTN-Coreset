@@ -80,7 +80,7 @@ class CourseQualityStation(BaseDataStation):
         # LOẠI BỎ CÁC CỘT ID (user_id, course_id)
         # Rất quan trọng: Nếu giữ ID, Cây Quyết Định (CoreTab/XGBoost) sẽ bị overfit 100%
         # tạo ra các leaf size = 1, làm phá vỡ hoàn toàn nguyên lý hoạt động của thuật toán.
-        id_cols = ['user_id', 'course_id', 'user_id_enc', 'course_id_enc']
+        id_cols = ['user_id', 'course_id', 'user_id_enc', 'course_id_enc', 'euclid_to_111']
         df = df.drop(columns=[c for c in id_cols if c in df.columns], errors='ignore')
             
         # Ánh xạ nhãn đích (label_f) sang 0, 1, 2
