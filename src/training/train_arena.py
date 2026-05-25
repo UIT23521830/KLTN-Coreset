@@ -113,6 +113,7 @@ class TrainingArena:
         y_pred = model.predict(X_test_eval)
         t_predict = time.time() - t1
         
+        t2 = time.time()
         # Toàn cục
         acc = accuracy_score(y_test, y_pred)
         bal_acc = balanced_accuracy_score(y_test, y_pred)
@@ -136,10 +137,14 @@ class TrainingArena:
         rec_class = recall_score(y_test, y_pred, average=None, zero_division=0)
         f1_class = f1_score(y_test, y_pred, average=None, zero_division=0)
         
+        gmean_class = geometric_mean_score(y_test, y_pred, average=None) if HAS_IMBLEARN else np.zeros_like(prec_class)
+        t_metrics = time.time() - t2
+        
         # Tạm lưu per-class theo list
         metrics = {
             "Train_Time": t_train,
             "Predict_Time": t_predict,
+            "Metric_Compute_Time": t_metrics,
             "Accuracy": acc,
             "BalancedAcc": bal_acc,
             "Precision_Macro": prec_macro,
@@ -153,7 +158,8 @@ class TrainingArena:
             "Kappa": kappa,
             "PerClass_Precision": prec_class.tolist(),
             "PerClass_Recall": rec_class.tolist(),
-            "PerClass_F1": f1_class.tolist()
+            "PerClass_F1": f1_class.tolist(),
+            "PerClass_GMean": gmean_class.tolist() if isinstance(gmean_class, np.ndarray) else gmean_class
         }
         return metrics
 
