@@ -83,7 +83,12 @@ class TrainingArena:
         if HAS_TABNET:
             self.models["TABNET"] = TabNetClassifier(verbose=0, seed=42)
         if HAS_TABPFN:
-            self.models["TABPFN"] = TabPFNClassifier()
+            import os as _os
+            _headless = _os.environ.get("DISPLAY", "") == "" and _os.name != "nt"
+            if _headless:
+                print("[!] TabPFN bị bỏ qua trên môi trường headless (Kaggle CPU/GPU). Cần API Key thủ công.")
+            else:
+                self.models["TABPFN"] = TabPFNClassifier()
 
     def save_raw_metrics(self, dataset, method, budget, seed, model_name, phase, metrics):
         # Save as JSON
