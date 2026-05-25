@@ -163,7 +163,7 @@ class TrainingArena:
         }
         return metrics
 
-    def run_arena(self, dataset_name="CourseQuality", skip_baseline=False):
+    def run_arena(self, dataset_name="CourseQuality", skip_baseline=False, method_filter="ALL"):
         print("="*60)
         print(f"⚔️ TRAINING ARENA - DATASET: {dataset_name}")
         print("="*60)
@@ -237,6 +237,12 @@ class TrainingArena:
             budget = parts[-2].replace('budget_', '')
             seed = parts[-1].replace('seed_', '').replace('.csv', '')
             
+            # Lọc theo phương pháp nếu được chỉ định
+            if method_filter != 'ALL' and method != method_filter:
+                continue
+            
+            print(f"  -> [{method}] budget={budget} seed={seed} | Bắt đầu train {len(self.models)} models...")
+            
             try:
                 df = pd.read_csv(csv_file)
                 if 'Error' in df.columns and df['Error'].iloc[0] == 'OOM':
@@ -274,6 +280,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--models', type=str, default='ALL', help='Comma-separated list of models to run (e.g. XGB,RF,MLP)')
+    parser.add_argument('--method', type=str, default='ALL', help='Coreset method to evaluate (e.g. M01_Random). ALL = chạy hết.')
     parser.add_argument('--skip_baseline', action='store_true', help='Skip training 100pct baseline to save time')
     args = parser.parse_args()
     
@@ -282,5 +289,5 @@ if __name__ == "__main__":
         allowed = args.models.split(',')
         arena.models = {k: v for k, v in arena.models.items() if k in allowed}
         print(f"[*] Đang chạy phân tán với các mô hình: {list(arena.models.keys())}")
-        
-    arena.run_arena(skip_baseline=args.skip_baseline)
+    
+    arena.run_arena(skip_baseline=args.skip_baseline, method_filter=args.method)
