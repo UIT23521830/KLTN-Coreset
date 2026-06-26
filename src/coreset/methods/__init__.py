@@ -1,3 +1,4 @@
+from .m00_stratified_random import M00_StratifiedRandomSelector
 from .m01_random import M01_RandomSelector
 from .m03_coretab import M03_CoreTabSelector
 from .m04_substrat import M04_SubStratSelector
@@ -15,6 +16,7 @@ from .m15_tabkde import TabKDESelector
 
 # Registry map for easy loading by name in the Factory loop
 METHOD_REGISTRY = {
+    "M00_StratifiedRandom": M00_StratifiedRandomSelector,
     "M01_Random": M01_RandomSelector,
     "M03_CoreTab": M03_CoreTabSelector,
     "M04_SubStrat": M04_SubStratSelector,
